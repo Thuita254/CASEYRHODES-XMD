@@ -44,12 +44,11 @@ jobs:
       - name: Run Bot (loop & auto-restart if crash)
         run: |
           echo "Running CASEYRHODES-XMD in auto-restart mode..."
-          timeout 18000 bash -c 'while true; do npm start || { echo "Bot crashed with exit code $?, restarting..."; sleep 2; }; done'
+          timeout 18000 bash -c 'while true; do npm start || { echo "Bot crashed with exit code $?, restarting..."; sleep 2; }; done'; [ $? -eq 124 ] && exit 0 || exit $?
 
       - name: Re-Trigger Workflow
         if: success()
         run: |
-          sleep 5
           echo "Re-running workflow..."
           curl -X POST \
             -H "Authorization: Bearer ${{ secrets.CASEYRHODES }}" \
